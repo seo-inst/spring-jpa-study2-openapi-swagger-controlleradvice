@@ -17,8 +17,10 @@ public interface ProductRepository  extends JpaRepository<Product,Long> {
             SQL : SELECT * FROM products WHERE product_name = ?
      */
     Optional<Product> findByName(String 노트북);
-
+    // 정렬
     List<Product> findAllByOrderByPriceAsc();
+    // like  : 특정 정보가 포함된 상품명의 상품들을 조회
+    List<Product> findByNameContaining(String keyword);
 }
 
 
