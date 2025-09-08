@@ -1,8 +1,10 @@
 package org.kosa.myproject.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 /**
  *  Entity : 데이터베이스 테이블과 1:1 매핑되는 자바 객체
@@ -16,9 +18,68 @@ import lombok.*;
 @Builder // 롬복을 이용한 빌더 패턴 적용 ,  객체 생성을 효율적으로
 @ToString
 public class Product {
-
+    @Id // Primary Key 설정
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// AUTO_INCREMENT 설정
+    @Column(name="product_id") // 컬럼명 명시적 지정
     private Long id;
+    @Column(name="product_name",unique = true,nullable = false,length = 100)
+    private String name;
+    @Column(name="price",nullable = false)
+    private Integer price;
+    /*
+        재고 수량
+     */
+    @Column(name = "stock_quantity", nullable = false)
+    private Integer stockQuantity;
+    /*
+            상품 설명
+            @Lob :  Large Object - 긴 텍스트나 바이너리 데이터
+     */
+    @Lob
+    @Column(name = "description")
+    private String description;
+    /**
+     *  상품 정보 생성일시
+     *  @CreationTimestamp : JPA (Hibernate) 가 엔티티 생성시 자동으로 현재 시간 설정
+     */
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    //==================================
+    // 비즈니스 메서드들 ( 도메인 로직 )
+    //==================================
+    public void updateProduct(String name,Integer price,Integer stockQuantity){
+        if(name !=null && !name.isBlank())
+            this.name=name;
+        if(price != null && price > 0)
+            this.price=price;
+        if(stockQuantity!=null && stockQuantity >=0)
+            this.stockQuantity = stockQuantity;
+    }
+    /*
+            재고 증가
+     */
+     public void addStock(int quantity){
+         if(quantity <=0 )
+             throw new IllegalArgumentException("재고 증가 수량은 양수여야 합니다");
+         this.stockQuantity += quantity;
+     }
+     /*
+            재고 감소
+      */
+    public void removeStock(int quantity){
+        if(quantity <= 0){
+            throw new IllegalArgumentException("재고 감소 수량은 양수여야 합니다");
+        }
+        if(this.stockQuantity < quantity){
+            throw new IllegalArgumentException("재고가 부족합니다");
+        }
+        this.stockQuantity -= quantity;
+    }
 }
+
+
 
 
 
