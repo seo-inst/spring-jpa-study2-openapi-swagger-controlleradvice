@@ -4,6 +4,7 @@ import org.kosa.myproject.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 // <Product,Long> : Product 는 관리 엔티티, Long 은 Primary key에 대응하는 필드의 타입
@@ -16,6 +17,8 @@ public interface ProductRepository  extends JpaRepository<Product,Long> {
             SQL : SELECT * FROM products WHERE product_name = ?
      */
     Optional<Product> findByName(String 노트북);
+
+    List<Product> findAllByOrderByPriceAsc();
 }
 
 
