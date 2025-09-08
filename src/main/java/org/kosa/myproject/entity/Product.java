@@ -49,13 +49,15 @@ public class Product {
     //==================================
     // 비즈니스 메서드들 ( 도메인 로직 )
     //==================================
-    public void updateProduct(String name,Integer price,Integer stockQuantity){
+    public void updateProduct(String name,Integer price,Integer stockQuantity,String description){
         if(name !=null && !name.isBlank())
             this.name=name;
         if(price != null && price > 0)
             this.price=price;
         if(stockQuantity!=null && stockQuantity >=0)
             this.stockQuantity = stockQuantity;
+        if(description !=null)
+            this.description = description;
     }
     /*
             재고 증가

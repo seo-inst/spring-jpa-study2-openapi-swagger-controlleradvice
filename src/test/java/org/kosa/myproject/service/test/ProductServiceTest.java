@@ -51,7 +51,34 @@ public class ProductServiceTest {
         // Then : 생성한 상품들의 리스트가 조회되는 지 확인
         assertThat(allProducts).hasSize(3);
     }
+    @Test
+    void testUpdateProduct(){
+        // Given: 수정할 상품 생성
+        ProductDto originalProduct = ProductDto.builder()
+                .name("원본상품")
+                .price(100000)
+                .stockQuantity(50)
+                .description("원본 설명")
+                .build();
+
+        ProductDto createdProduct = productService.createProduct(originalProduct);
+        // When : 상품 정보 수정
+        ProductDto updateDto = ProductDto.builder()
+                .name("수정된상품")
+                .price(150000)
+                .stockQuantity(30)
+                .description("수정된설명")
+                .build();
+        // 수정
+         ProductDto updatedProduct = productService.updateProduct(createdProduct.getId(),updateDto);
+         // Then : 수정된 내용 검증
+        assertThat(updatedProduct.getName()).isEqualTo("수정된상품");
+        log.info("수정된 상품 정보: {}",updatedProduct.toString());
+    }
 }
+
+
+
 
 
 

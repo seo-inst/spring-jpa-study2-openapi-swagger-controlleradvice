@@ -20,6 +20,7 @@ public class ProductService {
      *  - Lombok 의 @RequiredArgsConstructor 로 생성자 주입
       */
     private final ProductRepository productRepository;
+    @Transactional
     public ProductDto createProduct(ProductDto productDto){
        // Dto -> Entity 변환
         Product product = productDto.toEntity();
@@ -38,7 +39,29 @@ public class ProductService {
         // Stream API 를 활용해 Entity List -> Dto List 로 변환
         return  products.stream().map(ProductDto::from).collect(Collectors.toUnmodifiableList());
     }
+
+    /**
+     * 상품 수정하는 메서드
+     * @param id   수정할 상품 아이디
+     * @param updateDto  수정할 상품 정보
+     * @return ProductDto 수정된 상품 Dto
+     */
+    @Transactional
+    public ProductDto updateProduct(Long id, ProductDto updateDto) {
+        // db 에 있는 상품 조회
+        Product existingProduct = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다 ID:"+id));
+        // 상품 정보 업데이트 ( Entity 의 비즈니스 메서드 활용 )
+        existingProduct.updateProduct(updateDto.getName(),updateDto.getPrice(),updateDto.getStockQuantity(),updateDto.getDescription());
+        // commit 시점에  JPA 의 더티체킹(변경감지)으로 자동 업데이트 - update SQL 실행  , save() 불필요
+        // 상품 정보 업데이트 된 Entity 를  Dto 로 변환해 반환
+        return ProductDto.from(existingProduct);
+    }
 }
+
+
+
+
+
 
 
 
