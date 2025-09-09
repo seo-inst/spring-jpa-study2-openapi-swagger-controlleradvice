@@ -31,6 +31,18 @@ public class ProductService {
     }
 
     /**
+     *   상품아이디로 상품 조회
+     * @param id
+     * @return 조회된 상품 Dto
+     */
+    public ProductDto findProduct(Long id){
+        // 상품을 검색해서 존재하면 상품객체를 리턴하고 존재하지 않으면 RuntimeException 을 발생시킨다
+        Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("상품을 찾을 수 없습니다 ID:"+id));
+        return  ProductDto.from(product);// Entity 를 Dto 로 변환해 리턴한다
+    }
+
+
+    /**
      * 모든 상품 조회
      * @return 전체 상품 목록 Dto
      */
@@ -82,6 +94,18 @@ public class ProductService {
     public ProductDto findProductByName(String name) {
         Product product = productRepository.findByName(name).orElseThrow(()->new IllegalArgumentException("상품을 찾을 수 없습니다. 상품명:"+name));
         return  ProductDto.from(product);// entity 를 dto 로 반환한다
+    }
+
+    public List<ProductDto> findProductsOrderByPrice() {
+        List<Product> products = productRepository.findAllByOrderByPriceAsc();
+        // entity 요소로 구성된 리스트를 stream() 과 map() 을 이용해 dto 요소로 구성된 리스트로 만들어 리턴
+        return  products.stream().map(ProductDto::from).collect(Collectors.toUnmodifiableList());
+    }
+
+    public List<ProductDto> searchProductsByName(String  keyword) {
+        // repository : findByNameContaining(keyword) 를 ProductService 에서 호출해 구현하세요
+        List<Product> products = productRepository.findByNameContaining(keyword);
+        return products.stream().map(ProductDto::from).collect(Collectors.toUnmodifiableList());
     }
 }
 

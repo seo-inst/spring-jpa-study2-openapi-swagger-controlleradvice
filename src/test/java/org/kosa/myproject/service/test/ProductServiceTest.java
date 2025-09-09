@@ -110,6 +110,41 @@ public class ProductServiceTest {
         // Then: 올바른 상품이 조회되는지 검증
         assertThat(foundProduct.getName()).isEqualTo("특별한상품");
     }
+    @Test
+    void testFindProductsOrderByPrice() {
+        // Given: 다양한 가격의 상품들 생성
+        productService.createProduct(ProductDto.builder()
+                .name("고가상품").price(100000).stockQuantity(5).build());
+        productService.createProduct(ProductDto.builder()
+                .name("저가상품").price(30000).stockQuantity(20).build());
+        productService.createProduct(ProductDto.builder()
+                .name("중가상품").price(60000).stockQuantity(15).build());
+
+        // When: 가격 기준 오름차순 정렬 조회
+        List<ProductDto> sortedProducts =  productService.findProductsOrderByPrice();
+        // Then: 가격 순서대로 정렬되었는지 검증
+        assertThat(sortedProducts).hasSize(3);
+        sortedProducts.forEach(productDto -> log.info(productDto.toString()));
+    }
+    @Test
+    void testSearchProductsByName() {
+        // Given: 다양한 상품명의 상품들 생성
+        productService.createProduct(ProductDto.builder()
+                .name("삼성노트북").price(120000).stockQuantity(10).build());
+        productService.createProduct(ProductDto.builder()
+                .name("LG노트북").price(110000).stockQuantity(8).build());
+        productService.createProduct(ProductDto.builder()
+                .name("아이패드").price(90000).stockQuantity(15).build());
+        productService.createProduct(ProductDto.builder()
+                .name("갤럭시탭").price(80000).stockQuantity(12).build());
+
+        // When: "노트북" 키워드로 검색
+        List<ProductDto> searchProductList = productService.searchProductsByName("노트북");
+        // repository : findByNameContaining(keyword) 를 ProductService 에서 호출해 구현하세요
+        // Then: 키워드가 포함된 상품만 조회되는지 검증
+        assertThat(searchProductList).hasSize(2); // 노트북 상품 두개 조회
+        searchProductList.forEach(productDto -> log.info(productDto.toString()));
+    }
 }
 
 
