@@ -56,6 +56,33 @@ public class ProductService {
         // 상품 정보 업데이트 된 Entity 를  Dto 로 변환해 반환
         return ProductDto.from(existingProduct);
     }
+
+    public void deleteProduct(Long productId) {
+        // 존재 여부 확인 : 검증 절차
+        if(!productRepository.existsById(productId)){
+            throw new IllegalArgumentException("상품을 찾을 수 없습니다:"+productId);
+        }
+        productRepository.deleteById(productId);
+    }
+
+    /**
+     * 상품 존재 유무 확인
+     * @param productId
+     * @return 존재 여부 (true/false)
+     */
+    public boolean existsProduct(Long productId) {
+        return  productRepository.existsById(productId);
+    }
+
+    /**
+     *  상품명으로 조회
+     * @param name 검색할 상품명
+     * @return 조회된 상품 DTO
+     */
+    public ProductDto findProductByName(String name) {
+        Product product = productRepository.findByName(name).orElseThrow(()->new IllegalArgumentException("상품을 찾을 수 없습니다. 상품명:"+name));
+        return  ProductDto.from(product);// entity 를 dto 로 반환한다
+    }
 }
 
 

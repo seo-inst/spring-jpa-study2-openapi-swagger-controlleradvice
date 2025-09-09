@@ -75,6 +75,41 @@ public class ProductServiceTest {
         assertThat(updatedProduct.getName()).isEqualTo("수정된상품");
         log.info("수정된 상품 정보: {}",updatedProduct.toString());
     }
+    @Test
+    void testDeleteProduct(){
+        ProductDto productDto = ProductDto.builder()
+                .name("삭제될상품")
+                .price(50000)
+                .stockQuantity(10)
+                .build();
+
+        ProductDto createdProduct = productService.createProduct(productDto);
+        Long productId = createdProduct.getId();
+        //When : 상품 삭제
+        productService.deleteProduct(productId);
+        //Then: 삭제되었는 지 검증
+        assertThat(productService.existsProduct(productId)).isFalse();
+    }
+    // =================================
+    // 2단계: 쿼리 메서드 기반 서비스 테스트
+    // =================================
+    @Test
+    void testFindProductByName() {
+        // Given: 특정 이름의 상품 생성
+        ProductDto productDto = ProductDto.builder()
+                .name("특별한상품")
+                .price(75000)
+                .stockQuantity(25)
+                .build();
+
+        productService.createProduct(productDto);
+
+        // When: 상품명으로 조회
+        ProductDto foundProduct =  productService.findProductByName("특별한상품");
+
+        // Then: 올바른 상품이 조회되는지 검증
+        assertThat(foundProduct.getName()).isEqualTo("특별한상품");
+    }
 }
 
 
