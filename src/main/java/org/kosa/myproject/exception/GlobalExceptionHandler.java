@@ -1,9 +1,5 @@
 package org.kosa.myproject.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +25,9 @@ public class GlobalExceptionHandler {
      *  - 404 Not Found 응답
      */
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e){
+    public ResponseEntity<GlobalErrorResponse> handleRuntimeException(RuntimeException e){
         log.info("RuntimeException 발생하여 처리 {}",e.getMessage());
-        ErrorResponse error = ErrorResponse.builder()
+        GlobalErrorResponse error = GlobalErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(404)
                 .code("NOT_FOUND")
@@ -46,9 +42,9 @@ public class GlobalExceptionHandler {
      - 400 Bad Request 응답
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e){
+    public ResponseEntity<GlobalErrorResponse> handleIllegalArgumentException(IllegalArgumentException e){
         log.info("IllegalArgumentException 발생하여 처리 {}",e.getMessage());
-        ErrorResponse error = ErrorResponse.builder()
+        GlobalErrorResponse error = GlobalErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(400)
                 .code("BAD_REQUEST")
@@ -63,9 +59,9 @@ public class GlobalExceptionHandler {
      409 Conflict 응답
      */
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException e){
+    public ResponseEntity<GlobalErrorResponse> handleIllegalStateException(IllegalStateException e){
         log.info("IllegalStateException 발생하여 처리 {}",e.getMessage());
-        ErrorResponse error = ErrorResponse.builder()
+        GlobalErrorResponse error = GlobalErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(409)
                 .code("CONFLICT")
@@ -80,9 +76,9 @@ public class GlobalExceptionHandler {
      *      - 500 Internal Server Error 응답
      */
        @ExceptionHandler(Exception.class)
-       public ResponseEntity<ErrorResponse> handleException(Exception e){
+       public ResponseEntity<GlobalErrorResponse> handleException(Exception e){
            log.error("예상하지 못한 오류 발생 {}",e.getMessage(),e);
-           ErrorResponse error = ErrorResponse.builder()
+           GlobalErrorResponse error = GlobalErrorResponse.builder()
                    .timestamp(LocalDateTime.now())
                    .status(500)
                    .code("INTERNAL_ERROR")
