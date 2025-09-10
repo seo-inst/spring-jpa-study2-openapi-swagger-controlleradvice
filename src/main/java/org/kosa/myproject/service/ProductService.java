@@ -68,7 +68,7 @@ public class ProductService {
         // 상품 정보 업데이트 된 Entity 를  Dto 로 변환해 반환
         return ProductDto.from(existingProduct);
     }
-
+    @Transactional
     public void deleteProduct(Long productId) {
         // 존재 여부 확인 : 검증 절차
         if(!productRepository.existsById(productId)){
