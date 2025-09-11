@@ -62,7 +62,7 @@ public class Product {
     /*
             재고 증가
      */
-     public void addStock(int quantity){
+     public void increaseStock(int quantity){
          if(quantity <=0 )
              throw new IllegalArgumentException("재고 증가 수량은 양수여야 합니다");
          this.stockQuantity += quantity;
@@ -70,12 +70,12 @@ public class Product {
      /*
             재고 감소
       */
-    public void removeStock(int quantity){
+    public void decreaseStock(int quantity){
         if(quantity <= 0){
             throw new IllegalArgumentException("재고 감소 수량은 양수여야 합니다");
         }
         if(this.stockQuantity < quantity){
-            throw new IllegalArgumentException("재고가 부족합니다");
+            throw new IllegalStateException("재고가 부족합니다");
         }
         this.stockQuantity -= quantity;
     }

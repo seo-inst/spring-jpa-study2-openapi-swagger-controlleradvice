@@ -63,7 +63,6 @@ public class DataInitializer implements CommandLineRunner {
         // 각 상품을 데이터베이스에 저장
         for (Product product : sampleProducts) {
             productService.createProduct(ProductDto.from(product));
-            System.out.println("상품 등록: " + product.getName());
         }
     }
 }

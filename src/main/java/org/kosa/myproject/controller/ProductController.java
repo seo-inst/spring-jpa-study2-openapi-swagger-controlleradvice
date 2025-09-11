@@ -71,4 +71,37 @@ public class ProductController {
         ProductDto updatedProductDto = productService.updateProduct(id,productDto);
         return ResponseEntity.ok(updatedProductDto);
     }
+    /**
+     *  재고 증가 API
+     *  PATCH  /api/products/{id}/stock/increase
+     */
+    @PatchMapping("/{id}/stock/increase")
+    public ResponseEntity<ProductDto> increaseStock(@PathVariable Long id,@RequestParam("quantity") int quantity){
+        ProductDto patchedProductDto = productService.increaseStock(id,quantity);
+        return ResponseEntity.ok(patchedProductDto);
+    }
+    /**
+     *  재고 감소 API
+     *  PATCH  /api/products/{id}/stock/decrease
+     */
+    @PatchMapping("/{id}/stock/decrease")
+    public ResponseEntity<ProductDto> decreaseStock(@PathVariable Long id,@RequestParam("quantity") int quantity){
+        ProductDto patchedProductDto = productService.decreaseStock(id,quantity);
+        return ResponseEntity.ok(patchedProductDto);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

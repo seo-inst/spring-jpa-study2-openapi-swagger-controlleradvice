@@ -107,6 +107,21 @@ public class ProductService {
         List<Product> products = productRepository.findByNameContaining(keyword);
         return products.stream().map(ProductDto::from).collect(Collectors.toUnmodifiableList());
     }
+    @Transactional
+    public ProductDto increaseStock(Long id,int quantity){
+        // 상품 존재 여부 확인
+        Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("상품을 찾을 수 없습니다 ID:"+id));
+        // Entity 의 비즈니스 메서드 호출 : 트랜잭션 커밋 시점에 변경 감지(Dirty Checking) 되어 update sql 실행
+        product.increaseStock(quantity);
+        //  Entity 를 Dto 로 변환
+        return ProductDto.from(product);
+    }
+    @Transactional
+    public ProductDto decreaseStock(Long id, int quantity){
+        Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("상품을 찾을 수 없습니다"));
+        product.decreaseStock(quantity);
+        return ProductDto.from(product);
+    }
 }
 
 
