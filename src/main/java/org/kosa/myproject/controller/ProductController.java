@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kosa.myproject.dto.ProductDto;
+import org.kosa.myproject.dto.ProductStatsDto;
 import org.kosa.myproject.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,6 +89,11 @@ public class ProductController {
     public ResponseEntity<ProductDto> decreaseStock(@PathVariable Long id,@RequestParam("quantity") int quantity){
         ProductDto patchedProductDto = productService.decreaseStock(id,quantity);
         return ResponseEntity.ok(patchedProductDto);
+    }
+    @GetMapping("/statistics")
+    public ResponseEntity<ProductStatsDto> findProductStatistics(){
+        ProductStatsDto statsDto = productService.findProductStatistics();
+        return ResponseEntity.ok(statsDto);
     }
 }
 

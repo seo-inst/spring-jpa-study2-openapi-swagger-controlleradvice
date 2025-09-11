@@ -2,6 +2,7 @@ package org.kosa.myproject.service;
 
 import lombok.RequiredArgsConstructor;
 import org.kosa.myproject.dto.ProductDto;
+import org.kosa.myproject.dto.ProductStatsDto;
 import org.kosa.myproject.entity.Product;
 import org.kosa.myproject.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -121,6 +122,12 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("상품을 찾을 수 없습니다"));
         product.decreaseStock(quantity);
         return ProductDto.from(product);
+    }
+    /**
+     *      전체 상품 통계 서비스 ( Repository 의 JPQL 적용 메서드 테스트를 위해 )
+     */
+    public ProductStatsDto findProductStatistics(){
+        return productRepository.findProductStatistics();
     }
 }
 
